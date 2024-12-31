@@ -22,36 +22,13 @@ if (function_exists('vc_map')) {
             "icon" => "icon-wpb-plain-text",
             "params" => array(
                 array(
-                    "type" => "textarea",
-                    "heading" => __("Text Content", "text-domain"),
-                    "param_name" => "text_content",
-                    "value" => __("Default text here.", "text-domain"),
-                    "description" => __("Enter the content to display.", "text-domain"),
-                ),
-                array(
-                    "type" => "colorpicker",
-                    "heading" => __("Text Color", "text-domain"),
-                    "param_name" => "text_color",
-                    "value" => "#000000",
-                    "description" => __("Choose a text color.", "text-domain"),
-                ),
-                array(
-                    "type" => "textfield",
-                    "heading" => __("Font Size", "text-domain"),
-                    "param_name" => "font_size",
-                    "value" => "16px",
-                    "description" => __("Set the font size (e.g., 16px, 1em).", "text-domain"),
-                ),
-                array(
-                    "type" => "dropdown",
-                    "heading" => __("Text Alignment", "text-domain"),
-                    "param_name" => "text_align",
-                    "value" => array(
-                        __("Left", "text-domain") => "left",
-                        __("Center", "text-domain") => "center",
-                        __("Right", "text-domain") => "right",
-                    ),
-                    "description" => __("Choose text alignment.", "text-domain"),
+                    'type' => 'textarea_html',
+                    'holder' => 'div',
+                    'class' => 'wpc-text-class',
+                    'heading' => __( 'Description', 'text-domain' ),
+                    'param_name' => 'content',
+                    'value' => __( '', 'text-domain' ),
+                    'description' => __( 'To add link highlight text or url and click the chain to apply hyperlink', 'text-domain' ),
                 ),
                 array(
                     "type" => "textfield",
@@ -76,10 +53,6 @@ if (function_exists('vc_map')) {
 
 function simple_text_block_shortcode($atts, $content = null) {
     $atts = shortcode_atts(array(
-        'text_content' => 'Default text here.',
-        'text_color' => '#000000',
-        'font_size' => '16px',
-        'text_align' => 'left',
         'css' => '',
         'el_class' => '',
     ), $atts);
@@ -90,15 +63,17 @@ function simple_text_block_shortcode($atts, $content = null) {
     // Generate inline styles
     $inline_styles = vc_shortcode_custom_css_class($atts['css'], ' ');
 
-    $style = sprintf(
-        'color: %s; font-size: %s; text-align: %s;',
-esc_attr($atts['text_color']),
-esc_attr($atts['font_size']),
-        esc_attr($atts['text_align'])
-    );
+    $style = "";
+
+//     $style = sprintf(
+//         'color: %s; font-size: %s; text-align: %s;',
+// esc_attr($atts['text_color']),
+// esc_attr($atts['font_size']),
+//         esc_attr($atts['text_align'])
+//     );
 
     return '<div class="' . esc_attr($css_classes . $inline_styles) . '" style="' . $style . '">' .
-        wp_kses_post($atts['text_content']) .
+        wp_kses_post($content) .
         '</div>';
 }
 add_shortcode('simple_text_block', 'simple_text_block_shortcode');
